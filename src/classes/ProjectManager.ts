@@ -31,7 +31,7 @@ export class ProjectManager {
         const project = new Project(data);
 
 
-   
+
 
         project.ui.addEventListener("click", () => {
             const projectPage = document.getElementById("project-page") as HTMLDivElement;
@@ -53,6 +53,7 @@ export class ProjectManager {
         const todoDiv = document.getElementById("Todolist") as HTMLDivElement;
         this.id = project.id;
         if (!detailsPage && !todoDiv) { return; }
+
         const name = document.querySelector("[data-project-info='name']");
         const description = document.querySelector("[data-project-description='description']");
         const role = document.querySelector("[card-project-role='role']");
@@ -158,38 +159,38 @@ export class ProjectManager {
             project.role = data.role;
             project.status = data.status;
             project.date = new Date(data.date);
-            
+
         } else {
             throw new Error(`Project with id ${this.id} not found.`);
         }
     }
 
-    importJSON(){
+    importJSON() {
         const input = document.createElement(`input`)
         input.type = `file`
         input.accept = `application/json`
         const reader = new FileReader()
-        reader.addEventListener( "load", () => {
+        reader.addEventListener("load", () => {
             const json = reader.result
-            if (!json) {return}
+            if (!json) { return }
             const projects: IProject[] = JSON.parse(json as string)
-            
+
             for (const project of projects) {
-                const projectUpdate  = this.getProject(this.id)
-                if(projectUpdate) { 
+                const projectUpdate = this.getProject(this.id)
+                if (projectUpdate) {
                     //M2-Assigment Q#8
                     this.updateProject(project)
                 } else {
                     this.newProject(project)// "projects" tar in proprties från Class IProject
                 }
-            }   
+            }
         })
 
         input.addEventListener(`change`, () => {
             const filelist = input.files
-            if (!filelist) {return}
+            if (!filelist) { return }
             reader.readAsText(filelist[0])
         })
         input.click()
     }
-    }
+}

@@ -4,17 +4,17 @@ import { BlurShaderUtils } from 'three/examples/jsm/shaders/DepthLimitedBlurShad
 import { Todo } from './TodoClass';
 
 
- //M2-Assignment Q#2 
+//M2-Assignment Q#2 
 const colorArray = ['blue', 'green', 'red', 'yellow', 'orange', 'purple', 'pink', 'brown', 'black', 'grey'];
 function changeColorIcon() {
     const color = colorArray[Math.floor(Math.random() * colorArray.length)];
-    return color;   
+    return color;
 }
 
 
 // För att det är valbara alternativ
 export type role = "Admin" | "Manager" | "Developer" | "Designer"
-export type status = "pending" | "closed" | "archived" 
+export type status = "pending" | "closed" | "archived"
 
 
 export interface IProject {
@@ -26,77 +26,76 @@ export interface IProject {
 }
 
 
-export class Project implements IProject{
-    name: string
-    description: string
-    role: role
-    status: status
-    date: Date
-    ui: HTMLDivElement // skapar en ny variabel som är av typen HTMLDivElement
-    cost: number = 2
-    progess: number = 0
-    id: string
+export class Project implements IProject {
+    name!: string
+    description!: string
+    role!: role
+    status!: status
+    date!: Date
+    ui!: HTMLDivElement // skapar en ny variabel som är av typen HTMLDivElement
+    cost!: number
+    progess!: number
+    id!: string
     //M2-Assigment-#6
-    todos: Todo[] = [];
+    todos!: Todo[];
 
 
 
- constructor(data: IProject) {
+    constructor(data: IProject, date: Date) {
         //M2-Assigment-#6
-        this.todos = [] = [];
-
+        this.todos = [];
 
         //project card Property defintion
-      
-        for (const key in data) {
-            this[key] = data[key]
-            console.log(key, data[key])
+
+
+        for (const key in data as IProject) {
+            this[key] = data[key] as IProject[keyof IProject]
         }
         const key = this.id;
-        if (this[key] === data[key]) {
+        if (this[key as keyof IProject] === data[key as keyof IProject]) {
             console.log("successful");
         }
-        if (this[key] !== data[key]) {
+        if (this[key as keyof IProject] !== data[key as keyof IProject]) {
             console.log("not successful");
         }
         //M2-Assignment Q#3
-        if(this.name.length <5){
+        if (this.name.length < 5) {
             console.log("not valid name ")
             return
         }
         //M2-Assigment Q#4
         if (this.date !== undefined) {
             console.warn("ingen dataum satt")
-            this.date = new Date('1994-03-14')    
+            this.date = new Date('1994-03-14')
         }
-       
+
         //UNIK ID per Projekt
         this.id = uuidv4();
-       
+
         //Set UI for Project-card
         this.setUI();
-        
+
         //this.setUITodo(todos);
-    
+
     }
 
 
-     //M2-Assigment Q#7
+    //M2-Assigment Q#7
     addTodo(todo: Todo) {
         this.todos.push(todo)
     }
 
-    setUI() { 
-        if (this.ui){return}
+    setUI() {
+        if (this.ui) { return }
         this.ui = document.createElement("div") // skapar en ny div
         this.ui.className = "project-card" // ger ui div:en klassen "project-card" och ger CSS-style enligt classen
         //M2-Assignment Q#2
         const randomColor = changeColorIcon()
-        
+
         //M2-Assignment Q#1
         this.ui.innerHTML = ` 
     <div class="card-header">  
-    <p style="background-color: ${randomColor}; padding: 10px; border-radius: 8px; aspect-ratio: 1;">${this.name.slice(0,2)}</p>
+    <p style="background-color: ${randomColor}; padding: 10px; border-radius: 8px; aspect-ratio: 1;">${this.name.slice(0, 2)}</p>
                 <div>
                 <h5>${this.name}</h5>
                 <p>${this.description}</p>
@@ -117,12 +116,11 @@ export class Project implements IProject{
                 </div>
                 <div class="card-property">
                 <p style="color: #969696;">Estimated Progress</p>
-                <p>${this.progess*100} %</p>
+                <p>${this.progess * 100} %</p>
                 </div>
             </div>
     `}
-    
 
-    }
 
-   
+}
+
