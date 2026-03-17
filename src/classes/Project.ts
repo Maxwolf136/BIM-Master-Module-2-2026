@@ -1,6 +1,4 @@
 import { v4 as uuidv4 } from 'uuid';
-import { ProjectManager } from './ProjectManager';
-import { BlurShaderUtils } from 'three/examples/jsm/shaders/DepthLimitedBlurShader.js';
 import { Todo } from './TodoClass';
 
 
@@ -32,12 +30,12 @@ export class Project implements IProject {
     role!: role
     status!: status
     date!: Date
-    ui!: HTMLDivElement // skapar en ny variabel som är av typen HTMLDivElement
-    cost!: number
-    progess!: number
-    id!: string
+    ui!: HTMLDivElement
+    cost: number = 0
+    progess: number = 0
+    id: string
     //M2-Assigment-#6
-    todos!: Todo[];
+    todos: Todo[];
 
 
 
@@ -45,40 +43,36 @@ export class Project implements IProject {
         //M2-Assigment-#6
         this.todos = [];
 
-        //project card Property defintion
+        // Project card Property definition using for...of
+        const keys = Object.keys(data) as (keyof IProject)[];
+        for (const key of keys) {
+            if (key === 'date' && !data[key]) {
+                continue; // keep the logic for fallback date
+            }
+            (this as any)[key] = data[key];
+        }
+
+        if (!this.date) {
+            this.date = date;
+        }
 
 
-        for (const key in data as IProject) {
-            this[key] = data[key] as IProject[keyof IProject]
-        }
-        const key = this.id;
-        if (this[key as keyof IProject] === data[key as keyof IProject]) {
-            console.log("successful");
-        }
-        if (this[key as keyof IProject] !== data[key as keyof IProject]) {
-            console.log("not successful");
-        }
-        //M2-Assignment Q#3
-        if (this.name.length < 5) {
-            console.log("not valid name ")
-            return
-        }
-        //M2-Assigment Q#4
-        if (this.date !== undefined) {
-            console.warn("ingen dataum satt")
-            this.date = new Date('1994-03-14')
-        }
 
         //UNIK ID per Projekt
         this.id = uuidv4();
-
         //Set UI for Project-card
-        this.setUI();
+        this.nameToLong();
 
-        //this.setUITodo(todos);
+        this.setUI()
+
 
     }
-
+    //M2-Assigment Q#3
+    nameToLong() {
+        if (this.name.length > 5) {
+            throw new Error("för långt namn");
+        }
+    }
 
     //M2-Assigment Q#7
     addTodo(todo: Todo) {
@@ -119,8 +113,6 @@ export class Project implements IProject {
                 <p>${this.progess * 100} %</p>
                 </div>
             </div>
-    `}
-
-
+`}
 }
 

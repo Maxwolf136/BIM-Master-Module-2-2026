@@ -5,30 +5,39 @@ export class ProjectManager {
     // interna clsser/property
     list: Project[] = []; // skapar en ny array med typen Project
     ui: HTMLDivElement; // skapar en ny variabel som är av typen HTMLDivElement
-    id: string;
+    id: string | null = null;
 
     // constructor for ProjectManager class
     constructor(container: HTMLDivElement) {
         this.ui = container;
     }
 
+
+
+
+
+
     newProject(data: IProject) { // skapar en ny metod som tar in data av typen IProject
         const projectNames = this.list.map((project) => {
             return project.name;
         });
 
-        //M2-Assigment Q#3
-        const nameToLong = data.name.length > 5;
-        if (nameToLong) {
-            console.warn("för långt namn");
-            return false;
-        }
+
+        //M2-Assigment Q#7
+        const project = new Project(data, data.date);
+
         const nameInUse = projectNames.includes(data.name);
         if (nameInUse) {
             throw new Error(data.name + "finns redan"); // skapar en ny error som skickar ut ett meddelande om att namnet redan finns
         }
-        //M2-Assigment Q#7
-        const project = new Project(data);
+
+
+        //M2-Assigment Q#4
+        if (data.date === undefined) {
+            throw Error("Date -Undefiend")
+        } else {
+            data.date = new Date("1994-03-14")
+        }
 
 
 
@@ -40,6 +49,7 @@ export class ProjectManager {
 
             projectPage.style.display = "none";
             detailsPage.style.display = "flex";
+            this.id = project.id;
             this.setDetailsPage(project, this.id);
         });
 
@@ -176,12 +186,14 @@ export class ProjectManager {
             const projects: IProject[] = JSON.parse(json as string)
 
             for (const project of projects) {
-                const projectUpdate = this.getProject(this.id)
-                if (projectUpdate) {
-                    //M2-Assigment Q#8
-                    this.updateProject(project)
-                } else {
-                    this.newProject(project)// "projects" tar in proprties från Class IProject
+                if (this.id) {
+                    const projectUpdate = this.getProject(this.id)
+                    if (projectUpdate) {
+                        //M2-Assigment Q#8
+                        this.updateProject(project)
+                    } else {
+                        this.newProject(project)// "projects" tar in proprties från Class IProject
+                    }
                 }
             }
         })

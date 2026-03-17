@@ -11,7 +11,7 @@ export interface ITodo {
     description: string;
     status: todostatus;
     date: Date;
-    color: colorArray;
+    color?: colorArray;
     id: string
     ui: HTMLDivElement
 }
@@ -22,7 +22,7 @@ export class Todo implements ITodo {
     description: string;
     status: todostatus;
     date: Date;
-    color: colorArray;
+    color?: colorArray;
     id: string
     ui: HTMLDivElement
 
