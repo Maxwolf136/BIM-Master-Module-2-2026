@@ -48,9 +48,9 @@
                     </button>
                 </li>
                 <li class="nav-item">
-                    <button class="nav-button" data-page="analytics">
-                        <i class="material-symbols-outlined">analytics</i>
-                        <span>Analytics</span>
+                    <button class="nav-button" data-page="users">
+                        <i class="material-symbols-outlined">supervised_user_circle</i>
+                        <span>Users</span>
                     </button>
                 </li>
             </ul>
@@ -438,6 +438,119 @@
                     <div id="viewer-container" class="dashboard-card"></div>
                 </div>
             </div>
+        </div>
+        <div class="page" id="project-users" style="display: none;">
+            <header id="page-header">
+                <div class="header-left">
+                    <button class="mobile-menu-btn">
+                        <i class="material-symbols-outlined">menu</i>
+                    </button>
+                    <h1>User Management</h1>
+                </div>
+                <div class="header-right">
+                    <button id="new-user-btn"
+                        class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg shadow-lg transition-all duration-200 transform hover:scale-105 flex items-center gap-2 border border-blue-500 hover:border-blue-600">
+                        <i class="fa-solid fa-user-plus text-sm"></i>
+                        <span>New User</span>
+                    </button>
+                </div>
+            </header>
+
+            <div id="user-list" class="dashboard-card" style="margin: 20px;">
+                <div
+                    style="padding: 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e5e7eb;">
+                    <div
+                        style="display: flex; align-items: center; column-gap: 10px; width: 300px; background-color: #f3f4f6; padding: 8px 12px; border-radius: 8px;">
+                        <span class="material-symbols-outlined" style="color: #6b7280;">search</span>
+                        <input type="text" placeholder="Search Users..."
+                            style="width: 100%; background: transparent; border: none; outline: none; color: #374151;">
+                    </div>
+                </div>
+
+                <table style="width: 100%; text-align: left; border-collapse: collapse;">
+                    <thead>
+                        <tr style="border-bottom: 2px solid #e5e7eb; background-color: #f9fafb;">
+                            <th style="padding: 16px 20px; font-weight: 600; color: #4b5563;">User</th>
+                            <th style="padding: 16px 20px; font-weight: 600; color: #4b5563;">Email</th>
+                            <th style="padding: 16px 20px; font-weight: 600; color: #4b5563;">Role</th>
+                            <th style="padding: 16px 20px; font-weight: 600; color: #4b5563;">Status</th>
+                            <th style="padding: 16px 20px; font-weight: 600; color: #4b5563; text-align: right;">Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-table-body">
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- New User Modal Structure -->
+            <dialog id="new-user-modal" class="modern-modal">
+                <div class="modal-container">
+                    <div class="modal-header">
+                        <div class="modal-title">
+                            <i class="fa-solid fa-user-plus"></i>
+                            <h2>Add New User</h2>
+                        </div>
+                        <button id="close-user-modal-btn" class="modal-close-btn" type="button">
+                            <i class="material-symbols-outlined">close</i>
+                        </button>
+                    </div>
+                    <form id="new-user-form" class="modern-form">
+                        <div class="form-content">
+                            <div class="form-field">
+                                <div class="field-header">
+                                    <i class="fa-regular fa-user"></i>
+                                    <label for="user-name">Full Name</label>
+                                </div>
+                                <input id="user-name" name="name" type="text" placeholder="Enter full name..." required>
+                            </div>
+                            <div class="form-field">
+                                <div class="field-header">
+                                    <i class="fa-regular fa-envelope"></i>
+                                    <label for="user-email">Email Address</label>
+                                </div>
+                                <input id="user-email" name="email" type="email" placeholder="Enter email address..."
+                                    required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-field">
+                                    <div class="field-header">
+                                        <i class="fa-solid fa-briefcase"></i>
+                                        <label for="user-role">Role</label>
+                                    </div>
+                                    <select id="user-role" name="role" required>
+                                        <option value="">Select role</option>
+                                        <option value="Admin">Admin</option>
+                                        <option value="Manager">Manager</option>
+                                        <option value="Developer">Developer</option>
+                                        <option value="Designer">Designer</option>
+                                    </select>
+                                </div>
+                                <div class="form-field">
+                                    <div class="field-header">
+                                        <i class="fa-solid fa-toggle-on"></i>
+                                        <label for="user-status">Status</label>
+                                    </div>
+                                    <select id="user-status" name="status" required>
+                                        <option value="Active">Active</option>
+                                        <option value="Inactive">Inactive</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn-secondary" id="cancel-user-btn">
+                                <i class="fa-solid fa-times"></i>
+                                Cancel
+                            </button>
+                            <button type="submit" class="btn-primary">
+                                <i class="fa-solid fa-user-plus"></i>
+                                Add User
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </dialog>
         </div>
     </main>
     <script type="module" src="src/index.ts"></script>

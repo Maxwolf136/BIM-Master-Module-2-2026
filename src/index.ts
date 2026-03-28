@@ -1,20 +1,17 @@
 import { Project, IProject, role, status } from "./classes/Project"
-import { ProjectManager } from "./classes/ProjectManager"
+import { ProjectManager } from "./Managers/ProjectManager"
 import { closeModal, showModal, toggleModal, } from "./classes/Modal"
 import { Todo, ITodo, todostatus } from "./classes/TodoClass"
-
-// Import the changeColorIcon function
-const colorArray = ['blue', 'green', 'red', 'yellow', 'orange', 'purple', 'pink', 'brown', 'black', 'grey'];
-function changeColorIcon() {
-    const color = colorArray[Math.floor(Math.random() * colorArray.length)];
-    return color;
-}
 import { v4 as uuidv4 } from 'uuid';
+import { UserManager } from "./Managers/UserManager";
+import { IUser, UserRole, UserStatus } from "./classes/UsersClass";
 
 
 const projectlistUI = document.getElementById("project-list") as HTMLDivElement
 const projectManager = new ProjectManager(projectlistUI)
 
+const userlistUI = document.getElementById("user-list") as HTMLDivElement
+const userManager = new UserManager(userlistUI)
 
 
 // KLickar på knappen "New Project" och skapar en ny div med klassen "project" 
@@ -25,10 +22,18 @@ if (newProjectBtn) {
     console.warn("No new project button found")
 }
 
+const newUserBtn = document.getElementById("new-user-btn")
+if (newUserBtn) {
+    newUserBtn.addEventListener("click", () => { showModal("new-user-modal") })
+} else {
+    console.warn("No new user button found")
+}
+
 
 // Sidebar Navigation
 const projectPage = document.getElementById("project-page") as HTMLDivElement;
 const projectDetailsPage = document.getElementById("project-details") as HTMLDivElement;
+const userPage = document.getElementById("project-users") as HTMLDialogElement
 
 // Get all navigation buttons
 const navButtons = document.querySelectorAll('.nav-button') as NodeListOf<HTMLButtonElement>;
@@ -62,9 +67,9 @@ navButtons.forEach(button => {
                 projectPage.style.display = "none";
                 projectDetailsPage.style.display = "flex";
                 break;
-            case 'analytics':
+            case 'users':
                 projectPage.style.display = "none";
-                projectDetailsPage.style.display = "flex";
+                userPage.style.display = "flex";
                 break;
             case 'settings':
                 // Handle settings page
@@ -82,6 +87,37 @@ navButtons.forEach(button => {
 });
 
 
+
+const newUserForm = document.getElementById("new-user-form");
+
+if (newUserForm && newUserForm instanceof HTMLFormElement) {
+
+    newUserForm.addEventListener("submit", (e) => {
+        e.preventDefault()
+        const formData = new FormData(newUserForm)
+        const formDataProperty: IUser = {
+            name: formData.get("user-name") as string,
+            email: formData.get("user-email") as string,
+            userRole: formData.get("user-role") as UserRole,
+            status: formData.get("user-status") as UserStatus,
+        }
+        try {
+            userManager.newUser(formDataProperty)
+            newUserForm.reset()
+            toggleModal("new-user-modal")
+        } catch (error) {
+            console.log(error)
+        }
+    })
+
+
+
+} else {
+    console.warn("No project form found")
+
+}
+
+
 const projectForm = document.getElementById("new-project-form")
 
 if (projectForm && projectForm instanceof HTMLFormElement) {
@@ -97,7 +133,6 @@ if (projectForm && projectForm instanceof HTMLFormElement) {
         }
 
         try {
-
             const project = projectManager.newProject(projectProperty) // skapar en ny variabel som är av typen projectManager och kallar på metoden newProject
             projectForm.reset() // rensar inputfälten
             toggleModal("new-project-modal")

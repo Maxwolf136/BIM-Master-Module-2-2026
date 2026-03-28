@@ -32,14 +32,14 @@ export class Project implements IProject {
     date!: Date
     ui!: HTMLDivElement
     cost: number = 0
-    progess: number = 0
+    progess: number = (this.date.getTime() - new Date().getTime()) / 1000 / 60 / 60 / 24
     id: string
     //M2-Assigment-#6
     todos: Todo[];
 
 
 
-    constructor(data: IProject, date: Date) {
+    constructor(data: IProject) {
         //M2-Assigment-#6
         this.todos = [];
 
@@ -52,12 +52,6 @@ export class Project implements IProject {
             (this as any)[key] = data[key];
         }
 
-        if (!this.date) {
-            this.date = date;
-        }
-
-
-
         //UNIK ID per Projekt
         this.id = uuidv4();
         //Set UI for Project-card
@@ -67,6 +61,9 @@ export class Project implements IProject {
 
 
     }
+
+
+
     //M2-Assigment Q#3
     nameToLong() {
         if (this.name.length > 5) {

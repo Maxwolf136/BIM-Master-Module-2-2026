@@ -1,17 +1,16 @@
-import { Project, IProject } from './Project';
-import { Todo } from './TodoClass';
+import { Project, IProject } from '../classes/Project';
+import { Todo } from '../classes/TodoClass';
 
 export class ProjectManager {
     // interna clsser/property
     list: Project[] = []; // skapar en ny array med typen Project
-    ui: HTMLDivElement; // skapar en ny variabel som är av typen HTMLDivElement
+    ui: HTMLDivElement; // själva containern för projekten
     id: string | null = null;
 
     // constructor for ProjectManager class
     constructor(container: HTMLDivElement) {
         this.ui = container;
     }
-
 
 
 
@@ -24,11 +23,15 @@ export class ProjectManager {
 
 
         //M2-Assigment Q#7
-        const project = new Project(data, data.date);
+        const project = new Project(data);
 
         const nameInUse = projectNames.includes(data.name);
         if (nameInUse) {
             throw new Error(data.name + "finns redan"); // skapar en ny error som skickar ut ett meddelande om att namnet redan finns
+        }
+
+        if (data.name.length < 5) {
+            throw new Error("Name length must be at least 5 characters");
         }
 
 
@@ -45,7 +48,7 @@ export class ProjectManager {
         project.ui.addEventListener("click", () => {
             const projectPage = document.getElementById("project-page") as HTMLDivElement;
             const detailsPage = document.getElementById("project-details") as HTMLDivElement;
-            if (!detailsPage) { return; }
+            if (!detailsPage) { return }
 
             projectPage.style.display = "none";
             detailsPage.style.display = "flex";
